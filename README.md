@@ -14,7 +14,7 @@ This repo can be cloned from [https://github.com/theune32/drlnd-tennis] and subs
 
     make setup
     
-The basic setup was shared by a colleague:
+The basic setup was shared by a colleague and does the following:
 * create "files" directory
 * Download the unity environment app: "Tennis.app"
 * create a venv based on the "requirements.txt"
