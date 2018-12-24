@@ -21,6 +21,8 @@ The basic setup was shared by a colleague and does the following:
 * download the "Tennis.ipynb" from the Udacity repo, can be used by:
 `jupyter notebook`
 
+To start a training session, just run `python train.py`
+
 The repository contains 4 files:
 * train.py: here the training, setup and logging are handled
 * agent.py: all interactions with the model are handled here
