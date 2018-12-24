@@ -3,11 +3,11 @@ import numpy as np
 import torch
 
 from collections import deque
-from agent import Agent, SharedCritic
+from agent import SharedCritic
 from tbWrapper import TBWrapper
 from datetime import datetime
 
-env = UnityEnvironment(file_name='files/Tennis.app')
+env = UnityEnvironment(file_name='files/Tennis.app', no_graphics=True)
 brain_name = env.brain_names[0]
 env_info = env.reset(train_mode=True)[brain_name]
 brain = env.brains[brain_name]
@@ -61,12 +61,12 @@ def ddpg(n_episodes=5000):
         scores.append(score)
         tensorboard.add_scalar("{}-score".format(tag), score)
         tensorboard.add_scalar("{}-100-ep-scores".format(tag), np.mean(scores_deque))
-        print('\rEpisode {}\tAverage Score: {}\tScore: {}'.format(i_episode, np.mean(scores_deque), score))
-        if i_episode % 100 == 0 or np.mean(scores_deque) > 0.5:
+        print(f"Episode {i_episode} Average Score: {np.mean(scores_deque)} Score: {score}")
+        if i_episode % 200 == 0 or np.mean(scores_deque) > 0.5:
             torch.save(agent.actor_local_a.state_dict(), 'checkpoint_actor_a-{}.pth'.format(i_episode))
             torch.save(agent.actor_local_b.state_dict(), 'checkpoint_actor_b-{}.pth'.format(i_episode))
             torch.save(agent.critic_local.state_dict(), 'checkpoint_critic-{}.pth'.format(i_episode))
-            print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_deque)))
+            print(f"Episode {i_episode} Average Score: {np.mean(scores_deque)}")
         if np.mean(scores_deque) > 0.5:
             torch.save(agent.actor_local_a.state_dict(), 'checkpoint_actor_a_05+-{}.pth'.format(i_episode))
             torch.save(agent.actor_local_b.state_dict(), 'checkpoint_actor_b_05+-{}.pth'.format(i_episode))

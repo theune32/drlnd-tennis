@@ -208,10 +208,12 @@ class SharedCritic:
         critic_loss.backward()
         self.critic_optimizer.step()
 
-        # -------------- update Actor -------------- #
+        # -------------- update Actor a and b -------------- #
         actions_pred_a = self.actor_local_a(states[:, :self.state_size])
         actions_pred_b = self.actor_local_b(states[:, self.state_size:])
 
+        # loss per actor based predicted actions of agent a and the actual actions of agent b, and vice versa
+        # it also receives the 
         actor_loss_a = -self.critic_local(states, torch.cat([actions_pred_a, actions[:, 2:]], 1))[:, 0].mean()
         actor_loss_b = -self.critic_local(states, torch.cat([actions[:, :2], actions_pred_b], 1))[:, 1].mean()
 
