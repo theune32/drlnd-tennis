@@ -14,7 +14,7 @@ brain = env.brains[brain_name]
 agent = SharedCritic(state_size=env_info.vector_observations.shape[1], action_size=brain.vector_action_space_size,
                      random_seed=10, agent_count=2)
 tag = "test"
-tensorboard = TBWrapper('./logs/logs-{}-{}'.format(tag, datetime.now))
+tensorboard = TBWrapper('./logs/logs-{}-{}'.format(tag, datetime.now()))
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
