@@ -14,7 +14,7 @@ def hidden_init(layer):
 class Actor(nn.Module):
     """Actor model (=Policy)"""
 
-    def __init__(self, state_size, action_size, seed, fc1_units=350, fc2_units=275):
+    def __init__(self, state_size, action_size, seed, fc1_units=250, fc2_units=175):
 
         super(Actor, self).__init__()
         self.seed = torch.manual_seed(seed)
@@ -37,7 +37,7 @@ class Actor(nn.Module):
 class Critic(nn.Module):
     """ Critic Model (=Value)"""
 
-    def __init__(self, state_size, action_size, seed, agent_count, fcs1_units=350, fcs2_units=275):
+    def __init__(self, state_size, action_size, seed, agent_count, fcs1_units=250, fcs2_units=175):
         """Initialize parameters and build model"""
         super(Critic, self).__init__()
         self.seed = torch.manual_seed(seed)

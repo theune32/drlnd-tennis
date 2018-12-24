@@ -12,7 +12,7 @@ import torch.optim as optim
 BUFFER_SIZE = int(1e5)  # replay buffer size
 BATCH_SIZE = 128  # minibatch size
 GAMMA = 0.99  # discount factor
-TAU = 1e-3  # for soft update of target parameters
+TAU = 5e-3  # for soft update of target parameters
 LR_ACTOR = 1e-4  # learning rate of the actor
 LR_CRITIC = 1e-4  # learning rate of the critic
 WEIGHT_DECAY = 0  # L2 weight decay
@@ -125,6 +125,9 @@ class SharedCritic:
     def __init__(self, state_size, action_size, random_seed, agent_count):
         """Initialize an Agent object"""
 
+        np.random.seed(42)
+        torch.manual_seed(42)
+
         self.agent_count = agent_count
         self.state_size = state_size
         self.action_size = action_size
@@ -209,8 +212,8 @@ class SharedCritic:
         actions_pred_a = self.actor_local_a(states[:, :self.state_size])
         actions_pred_b = self.actor_local_b(states[:, self.state_size:])
 
-        actor_loss_a = -self.critic_local(states, torch.cat([actions_pred_a, actions[:, 2:]], 1)).mean()
-        actor_loss_b = -self.critic_local(states, torch.cat([actions[:, :2], actions_pred_b], 1)).mean()
+        actor_loss_a = -self.critic_local(states, torch.cat([actions_pred_a, actions[:, 2:]], 1))[:, 0].mean()
+        actor_loss_b = -self.critic_local(states, torch.cat([actions[:, :2], actions_pred_b], 1))[:, 1].mean()
 
         self.actor_optimizer_a.zero_grad()
         self.actor_optimizer_b.zero_grad()
@@ -220,7 +223,7 @@ class SharedCritic:
         self.actor_optimizer_b.step()
 
         # ---------- update target network ---------- #
-        self.loss = [actor_loss_a, actor_loss_b, critic_loss]
+        self.loss = [actor_loss_a.item(), actor_loss_b.item(), critic_loss.item()]
         self.soft_update(self.critic_local, self.critic_target, TAU)
         self.soft_update(self.actor_local_a, self.actor_target_a, TAU)
         self.soft_update(self.actor_local_b, self.actor_target_b, TAU)
