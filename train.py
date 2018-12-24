@@ -7,16 +7,18 @@ from agent import SharedCritic
 from tbWrapper import TBWrapper
 from datetime import datetime
 
+# loading environment, no_graphics set to True because of training issues
 env = UnityEnvironment(file_name='files/Tennis.app', no_graphics=True)
 brain_name = env.brain_names[0]
 env_info = env.reset(train_mode=True)[brain_name]
 brain = env.brains[brain_name]
 agent = SharedCritic(state_size=env_info.vector_observations.shape[1], action_size=brain.vector_action_space_size,
                      random_seed=10, agent_count=2)
-tag = "test"
-tensorboard = TBWrapper('./logs/logs-{}-{}'.format(tag, datetime.now()))
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+# tensorboard configuration
+tag = "test"
+tensorboard = TBWrapper('./logs/logs-{}-{}'.format(tag, datetime.now()))
 
 # number of agents
 num_agents = len(env_info.agents)
@@ -40,6 +42,7 @@ def ddpg(n_episodes=5000):
         env_info = env.reset(train_mode=True)[brain_name]
         state = env_info.vector_observations
         agent.reset()
+        # noinspection PyUnresolvedReferences
         score = np.zeros(2)
         while True:
             actions = agent.act(state)
@@ -78,4 +81,3 @@ def ddpg(n_episodes=5000):
 
 
 scores = ddpg()
-

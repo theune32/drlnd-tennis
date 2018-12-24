@@ -35,7 +35,8 @@ class Actor(nn.Module):
 
 
 class Critic(nn.Module):
-    """ Critic Model (=Value)"""
+    """ Critic Model (=Value),
+    for the multi-agent version the amount of output nodes is equeal to the amount of agents"""
 
     def __init__(self, state_size, action_size, seed, agent_count, fcs1_units=250, fcs2_units=175):
         """Initialize parameters and build model"""
